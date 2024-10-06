@@ -13,9 +13,6 @@
     <ClCompile Include="..\..\test\test_main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\test\test_tmatrix.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\test\test_tvector.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
