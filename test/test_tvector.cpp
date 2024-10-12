@@ -30,7 +30,7 @@ TEST(TVector, can_create_copied_vector)
   ASSERT_NO_THROW(TVector<int> v1(v));
 }
 
-TEST(TVector, copied_vector_is_equal_to_source_one)	 //проверка на то, что скопированный вектор идентичен исходному
+TEST(TVector, copied_vector_is_equal_to_source_one)	//проверка на то, что скопированный вектор идентичен исходному
 {
 	TVector<int> v1(5);
 	for (int i = 0; i < 5; i++)

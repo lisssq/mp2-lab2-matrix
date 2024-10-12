@@ -106,7 +106,6 @@ TVector<ValType>::~TVector()	// деструктор
 template <class ValType> // доступ
 ValType& TVector<ValType>::operator[](int pos)
 {
-	pos -= StartIndex;
 	if ((pos < 0) || (pos > Size-1))
 	{
 		throw - 1;
@@ -270,11 +269,11 @@ ValType TVector<ValType>::operator*(const TVector<ValType> &v)
 
 
 
-/*
+
 
 // Верхнетреугольная матрица
 template <class ValType>
-class TMatrix : public TVector <TVector<ValType>>
+class TMatrix : public TVector<TVector<ValType> >
 {
 public:
   TMatrix(int s = 10);                           
@@ -304,10 +303,6 @@ public:
 template <class ValType>
 TMatrix<ValType>::TMatrix(int s): TVector<TVector<ValType> >(s)
 {
-	for (int i = 0; i < s; i++)
-	{
-		pVector[i] = TVector<ValType>(s - i, i);
-	}
 }  
 
 template <class ValType> // конструктор копирования
@@ -319,68 +314,36 @@ TMatrix<ValType>::TMatrix(const TVector<TVector<ValType> > &mt):
   TVector<TVector<ValType> >(mt) {}
 
 template <class ValType> // сравнение
-bool TMatrix<ValType>::operator==(const TMatrix<ValType>& mt) const
+bool TMatrix<ValType>::operator==(const TMatrix<ValType> &mt) const
 {
-	if (this->Size != mt.Size) 
-	{
-		return false;
-	}
-	for (int i = 0; i < Size; i++)
-	{
-		if (mt.pVector[i] != pVector[i])
-		{
-			return false;
-		}
-	}
 	return true;
 }  
 
 template <class ValType> // сравнение
 bool TMatrix<ValType>::operator!=(const TMatrix<ValType> &mt) const
 {
-	return !(*this == mt);
+	return true;
 }  
 
 template <class ValType> // присваивание
 TMatrix<ValType>& TMatrix<ValType>::operator=(const TMatrix<ValType> &mt)
 {
-	if (this->Size != mt.Size)
-	{
-		delete[] pVector;
-		this->pVector = new TVector<ValType>[mt.Size];
-		this->Size = mt.Size;
-	}
-	for (int i = 0; i < Size; i++)
-	{
-		this->pVector[i] = mt.pVector[i];
-	}
 	return *this;
 }  
 
 template <class ValType> // сложение
 TMatrix<ValType> TMatrix<ValType>::operator+(const TMatrix<ValType> &mt)
 {
-	if (this->Size != mt.Size)
-	{
-		throw - 1;
-	}
-	return TVector<TVector<ValType>>::operator+(mt);
-}	
+	return *this;
+}  
 
 template <class ValType> // вычитание
 TMatrix<ValType> TMatrix<ValType>::operator-(const TMatrix<ValType> &mt)
 {
-	if (this->Size != mt.Size)
-	{
-		throw - 1;
-	}
-	return TVector<TVector<ValType>>::operator-(mt);
+	return *this;
 
 }  
 
 // TVector О3 Л2 П4 С6
 // TMatrix О2 Л2 П3 С3
-
-
-*/
 #endif
