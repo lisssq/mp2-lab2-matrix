@@ -267,13 +267,6 @@ ValType TVector<ValType>::operator*(const TVector<ValType> &v)
 
 
 
-
-
-
-
-
-/*
-
 // Верхнетреугольная матрица
 template <class ValType>
 class TMatrix : public TVector<TVector<ValType> >
@@ -305,12 +298,14 @@ public:
 
 
 template <class ValType>
-TMatrix<ValType>::TMatrix(int s): TVector<TVector<ValType> >(s)
+TMatrix<ValType>::TMatrix(int s) : TVector<TVector<ValType> >(s)
 {
+	if ((s < 1) || (s > MAX_MATRIX_SIZE))
+		throw - 1;
 
 	for (int i = 0; i < s; i++)
 	{
-		pVector[i] = TVector<ValType>(s - i, i);
+		pVector[i] = TVector<ValType>(s - i);  // Здесь мы убираем смещение i
 	}
 }
 
@@ -344,10 +339,7 @@ bool TMatrix<ValType>::operator==(const TMatrix<ValType>& mt) const
 template <class ValType> // сравнение
 bool TMatrix<ValType>::operator!=(const TMatrix<ValType> &mt) const
 {
-
-	return !(*this == mt);
-
-
+	return !(*this == mt);	
 }
 
 template <class ValType> // присваивание
@@ -377,9 +369,6 @@ TMatrix<ValType> TMatrix<ValType>::operator+(const TMatrix<ValType> &mt)
 	return TVector<TVector<ValType>>::operator+(mt);
 }
 
-	return *this;
-}
-
 
 template <class ValType> // вычитание
 TMatrix<ValType> TMatrix<ValType>::operator-(const TMatrix<ValType> &mt)
@@ -392,9 +381,15 @@ TMatrix<ValType> TMatrix<ValType>::operator-(const TMatrix<ValType> &mt)
 
 }
 
+//template <class ValType>
+//TVector <T> TMatrix operator[](int i)
+//{
+//	return pMatrix[i];
+//}
+
 // TVector О3 Л2 П4 С6
 // TMatrix О2 Л2 П3 С3
 
 
-*/
+
 #endif
