@@ -106,11 +106,11 @@ TVector<ValType>::~TVector()	// деструктор
 template <class ValType> // доступ
 ValType& TVector<ValType>::operator[](int pos)
 {
-	if ((pos < 0) || (pos > Size-1))
+	if ((pos < StartIndex) || (pos >= StartIndex + Size)) // проверяем от StartIndex до StartIndex + Size
 	{
 		throw - 1;
 	}
-	return pVector[pos];
+	return pVector[pos - StartIndex]; // доступ с учетом смещения
 }  
 
 
@@ -280,6 +280,7 @@ public:
 	TMatrix& operator= (const TMatrix& mt);        // присваивание
 	TMatrix  operator+ (const TMatrix& mt);        // сложение
 	TMatrix  operator- (const TMatrix& mt);        // вычитание
+	//TMatri operator[](int index);
 
 	// ввод / вывод
 	friend istream& operator>>(istream& in, TMatrix& mt)
@@ -311,7 +312,10 @@ TMatrix<ValType>::TMatrix(int s) : TVector<TVector<ValType> >(s)
 
 template <class ValType> // конструктор копирования
 TMatrix<ValType>::TMatrix(const TMatrix<ValType> &mt):
-  TVector<TVector<ValType> >(mt) {}
+  TVector<TVector<ValType> >(mt) 
+{
+	
+}
 
 template <class ValType> // конструктор преобразования типа
 TMatrix<ValType>::TMatrix(const TVector<TVector<ValType> > &mt):
@@ -381,11 +385,8 @@ TMatrix<ValType> TMatrix<ValType>::operator-(const TMatrix<ValType> &mt)
 
 }
 
-//template <class ValType>
-//TVector <T> TMatrix operator[](int i)
-//{
-//	return pMatrix[i];
-//}
+
+
 
 // TVector О3 Л2 П4 С6
 // TMatrix О2 Л2 П3 С3
