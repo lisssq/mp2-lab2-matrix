@@ -9,48 +9,23 @@
 #include "utmatrix.h"
 
 
-int main()
+
+void main()
 {
-    try
-    {
-        // Создаем матрицу 3x3 (верхнетреугольная)
-        TMatrix<int> matrix(3);
-        cout << "Matrix created with size 3" << endl;
+  TMatrix<int> a(5), b(5), c(5);
+  int i, j;
 
-        // Присвоим значения элементам матрицы
-        for (int i = 0; i < 3; i++)
-        {
-            for (int j = i; j < 3; j++)
-            {
-                cout << "Assigning value to matrix[" << i << "][" << j << "]" << endl;
-                matrix[i][j] = i + j;  // Пример присваивания значений
-            }
-        }
-
-        // Выведем матрицу
-        cout << "Matrix:" << endl;
-        cout << matrix;
-    }
-    catch (const std::out_of_range& e)
+  setlocale(LC_ALL, "Russian");
+  cout << "Тестирование программ поддержки представления треугольных матриц"
+    << endl;
+  for (i = 0; i < 5; i++)
+    for (j = i; j < 5; j++ )
     {
-        cout << "Out of range exception: " << e.what() << endl;
+      a[i][j] =  i * 10 + j;
+      b[i][j] = (i * 10 + j) * 100;
     }
-    catch (const std::bad_alloc& e)
-    {
-        cout << "Bad allocation exception: " << e.what() << endl;
-    }
-    catch (const std::exception& e)
-    {
-        cout << "Standard exception: " << e.what() << endl;
-    }
-    catch (int e)
-    {
-        cout << "Caught int exception: " << e << endl;
-    }
-    catch (...)
-    {
-        cout << "Unknown exception occurred." << endl;
-    }
-
-    return 0;
+  c = a + b;
+  cout << "Matrix a = " << endl << a << endl;
+  cout << "Matrix b = " << endl << b << endl;
+  cout << "Matrix c = a + b" << endl << c << endl;
 }
