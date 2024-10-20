@@ -46,6 +46,23 @@ public:
 
 
 
+
+
+  void InitInt(int a)
+  {
+	  for (int i = StartIndex; i < Size; i++)
+	  {
+		  pVector[i] = a;
+	  }
+  }
+
+
+
+
+
+
+
+
   // ввод-вывод
   friend istream& operator>>(istream &in, TVector &v)
   {
@@ -60,7 +77,7 @@ public:
 	  for (int i = 0; i < v.Size; i++)
 	  {
 		  out << v.pVector[i] << ' ';
-		  out << '\n';
+		  //out << '\n';
 	  }
     return out;
   }
@@ -106,11 +123,20 @@ TVector<ValType>::~TVector()	// деструктор
 template <class ValType> // доступ
 ValType& TVector<ValType>::operator[](int pos)
 {
-	if ((pos < StartIndex) || (pos >= StartIndex + Size)) // проверяем от StartIndex до StartIndex + Size
+	//if ((pos < StartIndex) || (pos >= StartIndex + Size)) // проверяем от StartIndex до StartIndex + Size
+	//{
+	//	throw - 1;
+	//}
+	//return pVector[pos - StartIndex]; // доступ с учетом смещения
+
+	pos -= StartIndex;
+	if ((pos < 0) || (pos >= Size))
 	{
-		throw - 1;
+		throw string("Wrong argument");
 	}
-	return pVector[pos - StartIndex]; // доступ с учетом смещения
+	return pVector[pos];
+
+
 }  
 
 
@@ -161,9 +187,17 @@ TVector<ValType>& TVector<ValType>::operator=(const TVector &v)
 	}
 	if (Size != v.Size)
 	{
-		delete[] pVector;
+		/*delete[] pVector;
 		Size = v.Size;
-		pVector = new ValType[v.Size];
+		pVector = new ValType[v.Size];*/
+	
+	
+		ValType* tmp = new ValType[v.Size];
+		delete[] pVector;
+		pVector = tmp;
+		Size = v.Size;
+	
+	
 	}
 	StartIndex = v.StartIndex;
 	for (int i = 0; i < Size; i++)
@@ -224,7 +258,7 @@ TVector<ValType> TVector<ValType>::operator+(const TVector<ValType> &v)
 	TVector <ValType> res(Size, StartIndex);
 	for (int i = 0; i < Size; i++)
 	{
-		res[i] = pVector[i] + v.pVector[i];
+		res.pVector[i] = pVector[i] + v.pVector[i];
 	}
 	return res;
 }  
@@ -241,7 +275,7 @@ TVector<ValType> TVector<ValType>::operator-(const TVector<ValType> &v)
 	TVector <ValType> res(Size, StartIndex);
 	for (int i = 0; i < Size; i++)
 	{
-		res[i] = pVector[i] - v.pVector[i];
+		res.pVector[i] = pVector[i] - v.pVector[i];
 	}
 	return res;
 }  
@@ -275,6 +309,9 @@ ValType TVector<ValType>::operator*(const TVector<ValType> &v)
 template <class ValType>
 class TMatrix : public TVector<TVector<ValType> >
 {
+	//using TVector<TVector<ValType>>::operator[];
+
+
 public:
 	TMatrix(int s = 10);
 	TMatrix(const TMatrix& mt);                    // копирование
@@ -285,6 +322,10 @@ public:
 	TMatrix  operator+ (const TMatrix& mt);        // сложение
 	TMatrix  operator- (const TMatrix& mt);        // вычитание
 	TMatrix operator* (const TMatrix& mt);         // умножение 
+
+	TVector<ValType>& operator[](int i);             // Для неконстантных объектов
+	const TVector<ValType>& operator[](int i) const; // Для константных объектов
+
 
 	// ввод / вывод
 	friend istream& operator>>(istream& in, TMatrix& mt)
@@ -298,6 +339,16 @@ public:
 		for (int i = 0; i < mt.Size; i++)
 			out << mt.pVector[i] << endl;
 		return out;
+		
+	}
+
+
+	void InitMat(int a)
+	{
+		for (int i = 0; i < Size; i++)
+		{
+			pVector[i].InitInt(0);
+		}
 	}
 };
 
@@ -310,7 +361,7 @@ TMatrix<ValType>::TMatrix(int s) : TVector<TVector<ValType> >(s)
 
 	for (int i = 0; i < s; i++)
 	{
-		pVector[i] = TVector<ValType>(s - i);  // Здесь мы убираем смещение i
+		pVector[i] = TVector<ValType>(s - i, i);  // Здесь мы убираем смещение i
 	}
 }
 
@@ -328,13 +379,13 @@ template <class ValType> // сравнение
 bool TMatrix<ValType>::operator==(const TMatrix<ValType>& mt) const
 
 {
-	/*if (this->Size != mt.Size)
+	/*if (Size != mt.Size)
 	{
 		return false;
 	}
 	for (int i = 0; i < Size; i++)
 	{
-		if (mt.pVector[i] != pVector[i])
+		if (pVector[i] != mt.pVector[i]) 
 		{
 			return false;
 		}
@@ -360,11 +411,12 @@ TMatrix<ValType>& TMatrix<ValType>::operator=(const TMatrix<ValType> &mt)
 
 	if (this->Size != mt.Size)
 	{
-		delete[] pVector;
-		this->pVector = new TVector<ValType>[mt.Size];
+		delete[] pVector;  // корректно освобождаем память
 		this->Size = mt.Size;
+		this->pVector = new TVector<ValType>[Size];
+		
 	}
-	
+
 	for (int i = 0; i < Size; i++)
 	{
 		this->pVector[i] = mt.pVector[i];
@@ -376,21 +428,52 @@ template <class ValType> // сложение
 TMatrix<ValType> TMatrix<ValType>::operator+(const TMatrix<ValType> &mt)
 {
 
+	//if (Size != mt.Size)
+	//{
+	//	throw - 1;
+	//}
+	//TMatrix<ValType> res(Size);
+	//for (int i = 0; i < Size; i++) 
+	//{
+	//	for (int j = i; j < Size; j++) 
+	//	{  // j всегда начинается с i, чтобы не выходить за пределы верхней треугольной части
+	//		res[i][j] = (*this)[i][j] + mt[i][j];  // Складываем элементы
+	//	}
+	//}
+	//return res;
+	
+	
+	return TVector<TVector<ValType>>::operator+(mt);
+
 	/*if (this->Size != mt.Size)
 	{
 		throw - 1;
-	}*/
-	return TVector<TVector<ValType>>::operator+(mt);
+	}
+	TMatrix res(Size);
+	for (int i = 0; i < Size; i++)
+	{
+		res.pVector[i] = pVector[i] + mt.pVector[i];
+	}
+	return res;*/
+
 }
 
 
 template <class ValType> // вычитание
 TMatrix<ValType> TMatrix<ValType>::operator-(const TMatrix<ValType> &mt)
 {
-	/*if (this->Size != mt.Size)
-	{
-		throw - 1;
-	}*/
+	//if (Size != mt.Size)
+	//{
+	//	return false;
+	//}
+	//TMatrix res(Size);
+	//for (int i = 0; i < Size; i++)
+	//{
+	//	res[i] = pVector[i] - mt.pVector[i];
+	//}
+	//return res;
+	// 
+	// 
 	return TVector<TVector<ValType>>::operator-(mt);
 
 }
@@ -399,7 +482,40 @@ TMatrix<ValType> TMatrix<ValType>::operator-(const TMatrix<ValType> &mt)
 template <class ValType>
 TMatrix<ValType> TMatrix<ValType>::operator*(const TMatrix& mt)
 {
+	/*if (Size != mt.Size)
+	{
+		return false;
+	}
+	TMatrix res(Size);
+	for (int i = 0; i < Size; i++)
+	{
+		for (int j = 0; j < Size; j++)
+		{
+			res[i][j] = ValType();
+			for (int k = 0; k < Size; k++)
+			{
+				res[i][j] = pVector[i][j] + mt.pVector[i][j];
+			}
+		}
+		
+	}
+	return res;*/
 
+}
+
+
+// Для неконстантных объектов
+template <class ValType>
+TVector<ValType>& TMatrix<ValType>::operator[](int i)
+{
+	return TVector<TVector<ValType>>::operator[](i);
+}
+
+// Для константных объектов
+template <class ValType>
+const TVector<ValType>& TMatrix<ValType>::operator[](int i) const
+{
+	return TVector<TVector<ValType>>::operator[](i);
 }
 
 
