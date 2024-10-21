@@ -24,7 +24,7 @@ protected:
   int Size;       // размер вектора
   int StartIndex; // индекс первого элемента вектора
 public:
-  TVector(int s = 10, int si = 0);
+  TVector(int s = 10, int si = 0);			// по умолчанию вектор длиной 10	
   TVector(const TVector &v);                // конструктор копирования
   ~TVector();
   int GetSize()      { return Size;       } // размер вектора
@@ -48,18 +48,13 @@ public:
 
 
 
-  void InitInt(int a)
+  void InitInt(int a)			// инициализация вектора (строка матрицы)
   {
 	  for (int i = StartIndex; i < Size; i++)
 	  {
 		  pVector[i] = a;
 	  }
   }
-
-
-
-
-
 
 
 
@@ -120,7 +115,7 @@ TVector<ValType>::~TVector()	// деструктор
 
 
 
-template <class ValType> // доступ
+template <class ValType> // доступ к элементу по индексу
 ValType& TVector<ValType>::operator[](int pos)
 {
 	//if ((pos < StartIndex) || (pos >= StartIndex + Size)) // проверяем от StartIndex до StartIndex + Size
@@ -132,7 +127,8 @@ ValType& TVector<ValType>::operator[](int pos)
 	pos -= StartIndex;
 	if ((pos < 0) || (pos >= Size))
 	{
-		throw string("Wrong argument");
+		//throw string("Wrong argument");
+		throw - 1;
 	}
 	return pVector[pos];
 
