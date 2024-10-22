@@ -32,6 +32,6 @@ void main()
 	cout << "Matrix b = " << endl << b << endl;
 
 	cout << "Matrix c = a + b" << endl << c << endl;		// сумма
-	cout << "Matrix c = a - b" << endl << d << endl;		// разность
-	cout << "Matrix c = a * b" << endl << e << endl;		// произведение
+	cout << "Matrix d = a - b" << endl << d << endl;		// разность
+	cout << "Matrix e = a * b" << endl << e << endl;		// произведение
 }
