@@ -12,25 +12,26 @@
 
 void main()
 {
-  TMatrix<int> a(5), b(5), c(5);
-  int i, j;
+	TMatrix<int> a(5), b(5), c(5), d(5), e(5);
+	int i, j;
 
-  setlocale(LC_ALL, "Russian");
-  cout << "Тестирование программ поддержки представления треугольных матриц"
-    << endl;
-  try {
-      for (i = 0; i < 5; i++)
-          for (j = i; j < 5; j++) {
-              a[i][j] = i * 10 + j;
-              b[i][j] = (i * 10 + j) * 100;
-          }
-      c = a + b;
-  }
-  catch (int e) {
-      cout << "Ошибка: выход за пределы массива!" << endl;
-  }
+	setlocale(LC_ALL, "Russian");
+	cout << "Тестирование программ поддержки представления треугольных матриц" << endl;
 
-  cout << "Matrix a = " << endl << a << endl;
-  cout << "Matrix b = " << endl << b << endl;
-  cout << "Matrix c = a + b" << endl << c << endl;
+	for (i = 0; i < 5; i++)
+		for (j = i; j < 5; j++) 
+		{
+			a[i][j] = i * 10 + j;
+			b[i][j] = (i * 10 + j) * 100;
+		}
+	c = a + b;
+	d = a - b;
+	e = a * b;
+
+	cout << "Matrix a = " << endl << a << endl;
+	cout << "Matrix b = " << endl << b << endl;
+
+	cout << "Matrix c = a + b" << endl << c << endl;		// сумма
+	cout << "Matrix c = a - b" << endl << d << endl;		// разность
+	cout << "Matrix c = a * b" << endl << e << endl;		// произведение
 }
