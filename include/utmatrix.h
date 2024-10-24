@@ -296,6 +296,7 @@ ValType TVector<ValType>::operator*(const TVector<ValType> &v)
 
 
 
+
 // Верхнетреугольная матрица
 template <class ValType>
 class TMatrix : public TVector<TVector<ValType> >

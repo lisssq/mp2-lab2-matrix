@@ -24,6 +24,7 @@ void main()
 			a[i][j] = i * 10 + j;
 			b[i][j] = (i * 10 + j) * 100;
 		}
+
 	c = a + b;
 	d = a - b;
 	e = a * b;
